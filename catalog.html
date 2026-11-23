@@ -25,7 +25,7 @@
       </nav>
       <div class="header-actions">
         <button class="header-action" id="themeToggle" type="button" aria-pressed="false">Тёмная тема</button>
-        <a class="header-action favorites-counter" href="catalog.html">Избранное: 0</a>
+        <a class="header-action favorites-counter" href="catalog.html?favorites=1">Избранное: 0</a>
         <a class="header-action cart-counter" href="order.html">Корзина: 0</a>
       </div>
     </div>
@@ -65,6 +65,11 @@
           <option value="title-asc">По названию А-Я</option>
           <option value="rating-desc">По рейтингу</option>
         </select>
+      </div>
+      
+      <div class="catalog-controls__group">
+        <label>&nbsp;</label>
+        <button class="btn btn--small" id="favoritesFilterBtn" type="button">Только избранное</button>
       </div>
     </section>
 

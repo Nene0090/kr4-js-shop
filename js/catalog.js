@@ -13,11 +13,14 @@ const catalogState = {
   category: 'all',
   sort: 'default',
   page: 1,
-  perPage: 6
+  perPage: 6,
+  onlyFavorites: false
 };
 
 let cartItems = [];
 let favoriteIds = [];
+let lastAddedId = null;
+let lastAddedTimer = null;
 
 function loadCart() {
   try {
@@ -89,6 +92,9 @@ function sortProducts(list, sortType) {
 
 function getPreparedProducts(list, state) {
   let result = [...list];
+  if (state.onlyFavorites) {
+    result = result.filter((product) => favoriteIds.includes(product.id));
+  }
   result = searchProducts(result, state.query);
   result = filterProductsByCategory(result, state.category);
   result = sortProducts(result, state.sort);
@@ -195,6 +201,8 @@ function createProductCard(product) {
   if (!product.isAvailable) {
     addButton.disabled = true;
     addButton.textContent = 'Недоступно';
+  } else if (lastAddedId === product.id) {
+    addButton.textContent = 'Добавлено';
   } else {
     addButton.textContent = 'В корзину';
   }
@@ -274,6 +282,15 @@ function addToCart(productId) {
   }
   saveCart();
   updateCartCounter();
+
+  lastAddedId = productId;
+  if (lastAddedTimer) {
+    clearTimeout(lastAddedTimer);
+  }
+  lastAddedTimer = setTimeout(() => {
+    lastAddedId = null;
+    updateCatalog();
+  }, 1500);
 }
 
 function toggleFavorite(productId) {
@@ -339,6 +356,29 @@ if (productsContainer) {
     if (favoriteButton) {
       toggleFavorite(Number(favoriteButton.dataset.productId));
     }
+  });
+}
+
+const favoritesParam = new URLSearchParams(window.location.search).get('favorites');
+if (favoritesParam === '1') {
+  catalogState.onlyFavorites = true;
+}
+
+const favoritesParam = new URLSearchParams(window.location.search).get('favorites');
+if (favoritesParam === '1') {
+  catalogState.onlyFavorites = true;
+}
+
+const favoritesFilterBtn = document.querySelector('#favoritesFilterBtn');
+if (favoritesFilterBtn) {
+  if (catalogState.onlyFavorites) {
+    favoritesFilterBtn.classList.add('btn--accent');
+  }
+  favoritesFilterBtn.addEventListener('click', () => {
+    catalogState.onlyFavorites = !catalogState.onlyFavorites;
+    favoritesFilterBtn.classList.toggle('btn--accent', catalogState.onlyFavorites);
+    catalogState.page = 1;
+    updateCatalog();
   });
 }
 

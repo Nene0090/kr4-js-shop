@@ -23,6 +23,13 @@ function saveCart(items) {
   localStorage.setItem('starhit-cart', JSON.stringify(items));
 }
 
+function updateCartCounters() {
+  const total = loadCart().reduce((sum, item) => sum + item.quantity, 0);
+  document.querySelectorAll('.cart-counter').forEach((element) => {
+    element.textContent = `Корзина: ${total}`;
+  });
+}
+
 function createPopularCard(product) {
   const card = document.createElement('article');
   card.classList.add('product-card');
@@ -144,6 +151,7 @@ if (popularContainer) {
       cart.push({ productId, quantity: 1 });
     }
     saveCart(cart);
+    updateCartCounters();
     button.textContent = 'Добавлено';
     setTimeout(() => {
       button.textContent = 'В корзину';
@@ -151,4 +159,5 @@ if (popularContainer) {
   });
 
   renderPopular();
+  updateCartCounters();
 }

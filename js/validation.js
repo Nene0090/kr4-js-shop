@@ -1,10 +1,8 @@
-const orderForm = document.querySelector('.order-form');
-const contactsForm = document.querySelector('.contact-feedback form');
+const orderForm = document.querySelector('#orderForm');
+const contactsForm = document.querySelector('#contactsForm');
 
 function showError(input, errorElement, message) {
-  if (!errorElement) {
-    return;
-  }
+  if (!errorElement) return;
   errorElement.textContent = message;
   input.setAttribute('aria-invalid', 'true');
   if (errorElement.id) {
@@ -13,9 +11,7 @@ function showError(input, errorElement, message) {
 }
 
 function clearError(input, errorElement) {
-  if (!errorElement) {
-    return;
-  }
+  if (!errorElement) return;
   errorElement.textContent = '';
   input.removeAttribute('aria-invalid');
   input.removeAttribute('aria-describedby');
@@ -23,15 +19,9 @@ function clearError(input, errorElement) {
 
 function digitsOf(value) {
   const digits = value.replace(/\D/g, '');
-  if (digits === '') {
-    return '';
-  }
-  if (digits.startsWith('8')) {
-    return `7${digits.slice(1)}`;
-  }
-  if (digits.startsWith('7')) {
-    return digits;
-  }
+  if (digits === '') return '';
+  if (digits.startsWith('8')) return `7${digits.slice(1)}`;
+  if (digits.startsWith('7')) return digits;
   return `7${digits}`;
 }
 
@@ -42,9 +32,7 @@ function isPhoneValid(value) {
 
 function formatPhone(value) {
   const digits = digitsOf(value);
-  if (!digits) {
-    return '';
-  }
+  if (!digits) return '';
   const visible = digits.slice(0, 11);
   const extra = digits.slice(11);
   const part = visible.slice(1);
@@ -58,9 +46,7 @@ function formatPhone(value) {
 }
 
 function attachPhoneMask(input) {
-  if (!input) {
-    return;
-  }
+  if (!input) return;
   input.addEventListener('input', () => {
     const cursorPosition = input.selectionStart;
     const digitsBeforeCursor = input.value.slice(0, cursorPosition).replace(/\D/g, '').length;
@@ -83,12 +69,13 @@ if (orderForm) {
   const phoneInput = orderForm.querySelector('#phone');
   const dateInput = orderForm.querySelector('#date');
   const productSelect = orderForm.querySelector('#product');
-  const agreementInput = orderForm.querySelector('input[type="checkbox"]');
-  const formMessage = orderForm.querySelector('.form-message') || document.getElementById('successMessage');
+  const agreementInput = orderForm.querySelector('#agreement');
+  const formMessage = orderForm.querySelector('.form-message');
 
   const nameError = orderForm.querySelector('#name-error');
   const emailError = orderForm.querySelector('#email-error');
   const phoneError = orderForm.querySelector('#phone-error');
+  const dateError = orderForm.querySelector('#date-error');
   const productError = orderForm.querySelector('#product-error');
   const agreementError = orderForm.querySelector('#agreement-error');
 
@@ -175,6 +162,7 @@ if (orderForm) {
       if (nameError) nameError.textContent = '';
       if (emailError) emailError.textContent = '';
       if (phoneError) phoneError.textContent = '';
+      if (dateError) dateError.textContent = '';
       if (productError) productError.textContent = '';
       if (agreementError) agreementError.textContent = '';
     }
@@ -184,7 +172,6 @@ if (orderForm) {
 if (contactsForm) {
   const contactName = contactsForm.querySelector('#contact-name');
   const contactEmail = contactsForm.querySelector('#contact-email');
-  const contactMessage = contactsForm.querySelector('#contact-message');
   const contactFormMessage = contactsForm.querySelector('.form-message');
 
   const contactNameError = contactsForm.querySelector('#contact-name-error');

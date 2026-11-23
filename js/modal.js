@@ -33,25 +33,23 @@ function saveCart(items) {
   localStorage.setItem('starhit-cart', JSON.stringify(items));
 }
 
+function updateCartCounters() {
+  const total = loadCart().reduce((sum, item) => sum + item.quantity, 0);
+  document.querySelectorAll('.cart-counter').forEach((element) => {
+    element.textContent = `Корзина: ${total}`;
+  });
+}
+
 function fillModal(product) {
   modalProductId = product.id;
 
-  if (modalTitle) {
-    modalTitle.textContent = product.title;
-  }
-
+  if (modalTitle) modalTitle.textContent = product.title;
   if (modalImage) {
     modalImage.src = product.image;
     modalImage.alt = product.title;
   }
-
-  if (modalRating) {
-    modalRating.textContent = `★ ${product.rating.toFixed(1)}`;
-  }
-
-  if (modalDescription) {
-    modalDescription.textContent = product.description;
-  }
+  if (modalRating) modalRating.textContent = `★ ${product.rating.toFixed(1)}`;
+  if (modalDescription) modalDescription.textContent = product.description;
 
   if (modalPrice) {
     modalPrice.textContent = '';
@@ -100,9 +98,7 @@ function fillModal(product) {
 
 function openModal(productId) {
   const product = products.find((item) => item.id === productId);
-  if (!product || !productModal) {
-    return;
-  }
+  if (!product || !productModal) return;
   fillModal(product);
   productModal.showModal();
 }
@@ -121,9 +117,7 @@ if (productModal && modalClose) {
 
 if (modalAddBtn) {
   modalAddBtn.addEventListener('click', () => {
-    if (modalProductId === null) {
-      return;
-    }
+    if (modalProductId === null) return;
     const cart = loadCart();
     const existing = cart.find((item) => item.productId === modalProductId);
     if (existing) {
@@ -132,6 +126,7 @@ if (modalAddBtn) {
       cart.push({ productId: modalProductId, quantity: 1 });
     }
     saveCart(cart);
+    updateCartCounters();
     modalAddBtn.textContent = 'Добавлено';
     setTimeout(() => {
       modalAddBtn.textContent = 'В корзину';

@@ -51,11 +51,11 @@ function getFinalPrice(product) {
   return Math.round(product.price - product.price * product.discountPercent / 100);
 }
 
-function updateCartCounter() {
-  if (cartCounter) {
-    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    cartCounter.textContent = `Корзина: ${totalQuantity}`;
-  }
+function updateCartCounters() {
+  const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  document.querySelectorAll('.cart-counter').forEach((element) => {
+    element.textContent = `Корзина: ${total}`;
+  });
 }
 
 function getCartDetails() {
@@ -78,11 +78,6 @@ function calculateSubtotal() {
 
 function calculateDiscount(subtotal) {
   return Math.round(subtotal * activeDiscount / 100);
-}
-
-function calculateTotal() {
-  const subtotal = calculateSubtotal();
-  return subtotal - calculateDiscount(subtotal);
 }
 
 function createCartRow(entry) {
@@ -190,7 +185,7 @@ function renderCart() {
     cartSummary.append(totalLine);
   }
 
-  updateCartCounter();
+  updateCartCounters();
 }
 
 function changeQuantity(productId, delta) {
@@ -268,5 +263,4 @@ if (promoApply && promoInput) {
 
 cartItems = loadCart();
 activeDiscount = loadDiscount();
-updateCartCounter();
 renderCart();
