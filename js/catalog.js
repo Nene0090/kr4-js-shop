@@ -323,6 +323,7 @@ if (categoryFilter) {
 if (sortSelect) {
   sortSelect.addEventListener('change', (event) => {
     catalogState.sort = event.target.value;
+    catalogState.onlyFavorites = event.target.value === 'favorites';
     catalogState.page = 1;
     updateCatalog();
   });
@@ -359,33 +360,14 @@ if (productsContainer) {
   });
 }
 
-const favoritesParam = new URLSearchParams(window.location.search).get('favorites');
-if (favoritesParam === '1') {
-  catalogState.onlyFavorites = true;
-}
-
-const favoritesParam = new URLSearchParams(window.location.search).get('favorites');
-if (favoritesParam === '1') {
-  catalogState.onlyFavorites = true;
-}
-
-const favoritesFilterBtn = document.querySelector('#favoritesFilterBtn');
-if (favoritesFilterBtn) {
-  if (catalogState.onlyFavorites) {
-    favoritesFilterBtn.classList.add('btn--accent');
-  }
-  favoritesFilterBtn.addEventListener('click', () => {
-    catalogState.onlyFavorites = !catalogState.onlyFavorites;
-    favoritesFilterBtn.classList.toggle('btn--accent', catalogState.onlyFavorites);
-    catalogState.page = 1;
-    updateCatalog();
-  });
-}
-
 cartItems = loadCart();
 favoriteIds = loadFavorites();
 updateCartCounter();
 updateFavoritesCounter();
+
+if (sortSelect && sortSelect.value === 'favorites') {
+  catalogState.onlyFavorites = true;
+}
 
 if (productsContainer) {
   updateCatalog();

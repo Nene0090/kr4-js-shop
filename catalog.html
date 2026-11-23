@@ -6,6 +6,13 @@
   <title>Star Hit Cafe — Каталог</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <script>
+    try {
+      if (localStorage.getItem('starhit-theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch {}
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Перейти к основному содержимому</a>
@@ -25,7 +32,7 @@
       </nav>
       <div class="header-actions">
         <button class="header-action" id="themeToggle" type="button" aria-pressed="false">Тёмная тема</button>
-        <a class="header-action favorites-counter" href="catalog.html?favorites=1">Избранное: 0</a>
+        <a class="header-action favorites-counter" href="catalog.html">Избранное: 0</a>
         <a class="header-action cart-counter" href="order.html">Корзина: 0</a>
       </div>
     </div>
@@ -64,12 +71,8 @@
           <option value="price-desc">Сначала дороже</option>
           <option value="title-asc">По названию А-Я</option>
           <option value="rating-desc">По рейтингу</option>
+          <option value="favorites">Только избранное</option>
         </select>
-      </div>
-      
-      <div class="catalog-controls__group">
-        <label>&nbsp;</label>
-        <button class="btn btn--small" id="favoritesFilterBtn" type="button">Только избранное</button>
       </div>
     </section>
 
