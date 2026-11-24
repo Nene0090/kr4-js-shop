@@ -37,10 +37,7 @@ function updateCartCounters() {
 }
 
 if (productTitle) {
-  const params = new URLSearchParams(window.location.search);
-  const rawId = params.get('id');
-  const productId = rawId ? Number(rawId) : 1;
-  const product = products.find((item) => item.id === productId) || products[0];
+  const product = products[0];
 
   if (!product) {
     productTitle.textContent = 'Товар не найден';
@@ -55,6 +52,7 @@ if (productTitle) {
         oldPrice.classList.add('product-detail__price-old');
         oldPrice.textContent = formatPrice(product.price);
         productPrice.append(oldPrice);
+        
         const newPrice = document.createElement('span');
         newPrice.classList.add('product-detail__price-new');
         newPrice.textContent = formatPrice(getFinalPrice(product));
