@@ -12,7 +12,6 @@ const PROMO_CODES = {
   CAFE15: 15
 };
 
-let cartItems = [];
 let activeDiscount = 0;
 
 function loadCart() {
@@ -25,8 +24,8 @@ function loadCart() {
   }
 }
 
-function saveCart() {
-  localStorage.setItem('starhit-cart', JSON.stringify(cartItems));
+function saveCart(items) {
+  localStorage.setItem('starhit-cart', JSON.stringify(items));
 }
 
 function loadDiscount() {
@@ -52,14 +51,16 @@ function getFinalPrice(product) {
 }
 
 function updateCartCounters() {
-  const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const items = loadCart();
+  const total = items.reduce((sum, item) => sum + item.quantity, 0);
   document.querySelectorAll('.cart-counter').forEach((element) => {
     element.textContent = `Корзина: ${total}`;
   });
 }
 
 function getCartDetails() {
-  return cartItems
+  const items = loadCart();
+  return items
     .map((item) => {
       const product = products.find((product) => product.id === item.productId);
       if (!product) {
@@ -189,21 +190,22 @@ function renderCart() {
 }
 
 function changeQuantity(productId, delta) {
-  const item = cartItems.find((item) => item.productId === productId);
+  let items = loadCart();
+  const item = items.find((item) => item.productId === productId);
   if (!item) {
     return;
   }
   item.quantity += delta;
   if (item.quantity <= 0) {
-    cartItems = cartItems.filter((item) => item.productId !== productId);
+    items = items.filter((item) => item.productId !== productId);
   }
-  saveCart();
+  saveCart(items);
   renderCart();
 }
 
 function removeFromCart(productId) {
-  cartItems = cartItems.filter((item) => item.productId !== productId);
-  saveCart();
+  const items = loadCart().filter((item) => item.productId !== productId);
+  saveCart(items);
   renderCart();
 }
 
@@ -261,6 +263,11 @@ if (promoApply && promoInput) {
   });
 }
 
-cartItems = loadCart();
 activeDiscount = loadDiscount();
 renderCart();
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'starhit-cart') {
+    renderCart();
+  }
+});
