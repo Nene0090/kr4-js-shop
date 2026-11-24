@@ -39,23 +39,11 @@ function updateCartCounters() {
 if (productTitle) {
   const params = new URLSearchParams(window.location.search);
   const rawId = params.get('id');
-  const productId = Number(rawId);
-  const product = products.find((item) => item.id === productId);
+  const productId = rawId ? Number(rawId) : 1;
+  const product = products.find((item) => item.id === productId) || products[0];
 
   if (!product) {
     productTitle.textContent = 'Товар не найден';
-    if (productPrice) productPrice.textContent = '';
-    if (productDesc) productDesc.textContent = 'Проверьте ссылку или вернитесь в каталог.';
-    if (productImage) {
-      productImage.src = '';
-      productImage.alt = '';
-    }
-    if (productRating) productRating.textContent = '';
-    if (productStatus) productStatus.textContent = '';
-    if (productAddBtn) {
-      productAddBtn.disabled = true;
-      productAddBtn.textContent = 'Недоступно';
-    }
   } else {
     document.title = `Star Hit Cafe — ${product.title}`;
     productTitle.textContent = product.title;
